@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Dual Blades icon</title>
+  <defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".35"/></filter></defs>
+  <g filter="url(#shadow)" stroke="#292929" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#f3f2ee" d="M55 213c10-49 31-101 63-155 11-19 25-34 42-45-3 39-17 75-42 108-24 32-45 62-63 92z"/>
+    <path fill="#f3f2ee" d="M201 213c-10-49-31-101-63-155-11-19-25-34-42-45 3 39 17 75 42 108 24 32 45 62 63 92z"/>
+    <path fill="#f3f2ee" d="M84 181l-30 31M172 181l30 31"/>
+    <path fill="none" d="M95 70c-12 28-22 58-29 88M161 70c12 28 22 58 29 88"/>
+  </g>
+</svg>

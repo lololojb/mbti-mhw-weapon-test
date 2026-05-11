@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MBTI × 怪物猎人荒野 — 你的专属武器</title>
+<style>
+:root {
+  --red: #b6302a;
+  --red-dim: rgba(182, 48, 42, .45);
+  --gold: #deb970;
+  --gold-dim: rgba(222, 185, 112, .5);
+  --gold-faint: rgba(222, 185, 112, .18);
+  --bg: #171515;
+  --card-bg: rgba(255,255,255,.045);
+  --card-bg-hover: rgba(255,255,255,.075);
+  --card-bg-deep: rgba(255,255,255,.065);
+  --border: rgba(245,240,232,.12);
+  --border-hover: rgba(245,240,232,.25);
+  --border-gold: rgba(222,185,112,.45);
+  --text: #f5f0e8;
+  --text-dim: #cfc3b0;
+  --accent-ei: #c06050;
+  --accent-sn: #5095b0;
+  --accent-tf: #509560;
+  --accent-jp: #9070b0;
+  --radius: 8px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: Inter, "Microsoft YaHei", "PingFang SC", system-ui, -apple-system, sans-serif;
+  background:
+    linear-gradient(135deg, rgba(182,48,42,.18), transparent 35%),
+    radial-gradient(circle at 78% 10%, rgba(222,185,112,.12), transparent 28%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh; min-height: 100dvh;
+  display: flex; justify-content: center; align-items: center;
+  line-height: 1.6; overflow-x: hidden;
+}
+
+#app {
+  width: 100%; max-width: 560px;
+  min-height: 100vh; min-height: 100dvh;
+  display: flex; flex-direction: column; position: relative;
+}
+
+/* ===== Hero Screen ===== */
+#hero {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 36px 20px; gap: 20px;
+}
+
+.palico-svg {
+  width: 120px; height: 120px;
+  filter: drop-shadow(0 4px 16px rgba(100,90,140,.35));
+  animation: palicoFloat 3s ease-in-out infinite;
+}
+@keyframes palicoFloat {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(0); }
+  80% { transform: translateY(-4px); }
+}
+
+.hero-title {
+  font-size: 28px; font-weight: 800; color: var(--text);
+  letter-spacing: 1px;
+}
+.hero-title em { font-style: normal; color: var(--gold); }
+.hero-subtitle {
+  font-size: 14px; color: var(--text-dim); max-width: 300px;
+}
+
+.weapon-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px; max-width: 400px; width: 100%;
+}
+.wp-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 8px 10px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: default;
+  transition: all .2s;
+}
+.wp-tile:hover { background: var(--card-bg-hover); border-color: var(--border-hover); }
+.wp-tile img {
+  width: 44px; height: 44px;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
+  opacity: .75; transition: opacity .2s;
+}
+.wp-tile:hover img { opacity: 1; }
+.wp-tile .wp-name {
+  font-size: 11px; color: var(--text-dim); letter-spacing: 1px;
+}
+.wp-logo-tile {
+  display: flex; align-items: center; justify-content: center;
+  grid-column: span 2;
+  padding: 12px 8px;
+}
+.wp-logo-tile .mhw-logo-text {
+  font-size: 16px; font-weight: 800; color: var(--gold);
+  letter-spacing: 2px; opacity: .6;
+  font-family: Inter, "Microsoft YaHei", sans-serif;
+}
+
+.btn-start {
+  margin-top: 4px; padding: 15px 52px; font-size: 17px; font-weight: 700;
+  background: rgba(222,185,112,.15); color: var(--gold);
+  border: 1px solid rgba(222,185,112,.35); border-radius: 6px;
+  cursor: pointer; letter-spacing: 1px;
+  transition: all .25s;
+}
+.btn-start:hover { background: rgba(222,185,112,.25); border-color: var(--gold); }
+.btn-start:active { transform: scale(.97); }
+
+/* ===== Quiz Section ===== */
+#quiz {
+  flex: 1; display: none; flex-direction: column; padding: 28px 20px;
+}
+.progress-bar-outer {
+  width: 100%; height: 4px;
+  background: rgba(245,240,232,.08); border-radius: 2px; overflow: hidden;
+}
+.progress-bar-inner {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, var(--red-dim), var(--gold));
+  transition: width .4s ease;
+}
+.progress-text {
+  text-align: center; font-size: 12px; color: var(--text-dim); margin-top: 8px;
+}
+
+.question-card {
+  flex: 1; display: flex; flex-direction: column;
+  animation: fadeSlideIn .35s ease;
+}
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.q-number {
+  font-size: 11px; color: var(--gold); letter-spacing: 2px; margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.q-text {
+  font-size: 20px; font-weight: 600; color: var(--text);
+  margin-bottom: 24px; line-height: 1.5;
+}
+
+.options { display: flex; flex-direction: column; gap: 8px; }
+
+.opt-btn {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 16px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer;
+  transition: all .18s; font-size: 14px; color: var(--text-dim);
+}
+.opt-btn:hover { border-color: var(--border-hover); background: var(--card-bg-hover); color: var(--text); }
+.opt-btn.selected {
+  border-color: var(--border-gold); background: rgba(222,185,112,.08);
+  color: var(--gold); box-shadow: 0 0 12px rgba(222,185,112,.06);
+}
+.opt-btn .opt-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid rgba(245,240,232,.18); transition: all .18s; flex-shrink: 0;
+}
+.opt-btn.selected .opt-dot {
+  border-color: var(--gold); background: var(--gold);
+  box-shadow: 0 0 6px rgba(222,185,112,.3);
+}
+
+.quiz-nav { display: flex; gap: 10px; margin-top: 24px; padding-bottom: var(--safe-b); }
+.btn-back, .btn-next {
+  padding: 11px 24px; font-size: 14px; font-weight: 600;
+  border-radius: 6px; cursor: pointer; transition: all .2s; border: none;
+}
+.btn-back {
+  background: transparent; color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+.btn-back:hover { border-color: var(--border-hover); color: var(--text); }
+.btn-next {
+  flex: 1; background: rgba(222,185,112,.15); color: var(--gold);
+  border: 1px solid rgba(222,185,112,.25);
+}
+.btn-next:disabled { opacity: .25; cursor: not-allowed; }
+.btn-next:not(:disabled):hover { background: rgba(222,185,112,.25); }
+
+/* ===== Result Section ===== */
+#result {
+  flex: 1; display: none; flex-direction: column;
+  padding: 28px 20px 40px; gap: 20px;
+  animation: fadeSlideIn .5s ease;
+}
+
+.result-header { text-align: center; }
+.mbti-type-badge {
+  display: inline-block; padding: 8px 22px;
+  background: rgba(222,185,112,.08); border: 1px solid rgba(222,185,112,.25);
+  border-radius: 6px; font-size: 30px; font-weight: 800;
+  letter-spacing: 5px; color: var(--gold);
+}
+.mbti-name { font-size: 16px; color: var(--text); margin-top: 8px; letter-spacing: 1px; }
+
+.dim-bars {
+  display: flex; flex-direction: column; gap: 8px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 18px;
+}
+.dim-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.dim-label-left, .dim-label-right {
+  width: 18px; text-align: center; font-weight: 700; flex-shrink: 0;
+}
+.dim-label-left { color: var(--text-dim); }
+.dim-label-right { color: var(--text); }
+.dim-bar-track {
+  flex: 1; height: 6px; background: rgba(245,240,232,.08); border-radius: 3px; overflow: hidden;
+}
+.dim-bar-fill { height: 100%; border-radius: 3px; transition: width .8s ease; }
+.dim-bar-fill.ei { background: var(--accent-ei); }
+.dim-bar-fill.sn { background: var(--accent-sn); }
+.dim-bar-fill.tf { background: var(--accent-tf); }
+.dim-bar-fill.jp { background: var(--accent-jp); }
+.dim-percent { width: 40px; text-align: right; font-size: 10px; color: var(--text-dim); flex-shrink: 0; }
+
+.mbti-desc {
+  font-size: 14px; color: var(--text-dim); line-height: 1.7;
+  text-align: center; padding: 0 6px;
+}
+
+.section-divider {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--gold); font-size: 13px; font-weight: 600; letter-spacing: 1px;
+}
+.section-divider::before, .section-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(222,185,112,.25), transparent);
+}
+
+.weapon-card {
+  background: var(--card-bg-deep); border: 1px solid var(--border-gold);
+  border-radius: var(--radius); padding: 22px 18px; text-align: center;
+  position: relative; box-shadow: 0 4px 24px rgba(0,0,0,.2);
+}
+.weapon-card .match-badge {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  padding: 4px 14px; background: var(--gold); color: var(--bg);
+  border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: 1px;
+}
+
+.weapon-icon-wrap {
+  width: 96px; height: 96px; margin: 14px auto 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.weapon-icon-wrap img {
+  width: 100%; height: 100%;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,.4));
+}
+.weapon-name {
+  font-size: 24px; font-weight: 800; color: var(--text); letter-spacing: 2px;
+}
+.weapon-name-en {
+  font-size: 12px; color: var(--text-dim); margin-top: 2px;
+}
+
+.weapon-reason {
+  margin-top: 14px; font-size: 14px; color: var(--text); line-height: 1.7;
+  text-align: left; padding: 12px 14px;
+  background: rgba(255,255,255,.03); border-radius: 6px;
+  border-left: 2px solid var(--gold-dim);
+}
+.weapon-meme {
+  margin-top: 10px; font-size: 13px; color: #d4a860; line-height: 1.6;
+  text-align: left; padding: 12px 14px;
+  background: rgba(222,185,112,.05); border-radius: 6px;
+  border-left: 2px solid rgba(222,185,112,.4); font-style: italic;
+}
+
+.weapon-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 12px; }
+.tag {
+  padding: 3px 12px; background: rgba(222,185,112,.08);
+  border: 1px solid rgba(222,185,112,.2); border-radius: 4px;
+  font-size: 11px; color: var(--gold);
+}
+
+.alt-weapons { text-align: center; font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+.alt-weapons span { color: var(--gold); font-weight: 600; }
+
+.btn-row { display: flex; gap: 10px; }
+.btn-retry, .btn-share {
+  flex: 1; padding: 12px; font-size: 14px; font-weight: 600;
+  border-radius: 6px; cursor: pointer; transition: all .2s; border: none;
+}
+.btn-retry {
+  background: transparent; color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+.btn-retry:hover { border-color: var(--border-hover); color: var(--text); }
+.btn-share {
+  background: rgba(222,185,112,.15); color: var(--gold);
+  border: 1px solid rgba(222,185,112,.25);
+}
+.btn-share:hover { background: rgba(222,185,112,.25); }
+
+.footer {
+  text-align: center; font-size: 11px; color: var(--text-dim);
+  opacity: .5; padding-bottom: var(--safe-b);
+}
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+  padding: 9px 20px; background: var(--gold); color: var(--bg);
+  border-radius: 6px; font-size: 13px; font-weight: 600;
+  z-index: 999; animation: toastIn .3s ease; pointer-events: none;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 400px) {
+  .hero-title { font-size: 24px; }
+  .q-text { font-size: 18px; }
+  .mbti-type-badge { font-size: 26px; letter-spacing: 3px; }
+  .weapon-name { font-size: 21px; }
+  .weapon-preview-grid { gap: 6px; grid-template-columns: repeat(4, 1fr); }
+  .wp-tile { padding: 10px 4px 8px; }
+  .wp-tile img { width: 36px; height: 36px; }
+  .wp-tile .wp-name { font-size: 10px; }
+  .wp-logo-tile .mhw-logo-text { font-size: 13px; }
+  .palico-svg { width: 100px; height: 100px; }
+}
+@media (max-width: 340px) {
+  .weapon-preview-grid { gap: 4px; }
+  .wp-tile img { width: 30px; height: 30px; }
+  .wp-tile .wp-name { font-size: 9px; }
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===== HERO ===== -->
+  <section id="hero">
+    <img class="palico-svg" src="assets/palico-daicat.svg" alt="艾露猫" width="120" height="120">
+    <h1 class="hero-title">狩魂<em>性格</em>检定</h1>
+    <p class="hero-subtitle">40道题 · 4个维度 · 艾露猫为你找到《怪物猎人：荒野》中的命定之武器</p>
+    <div class="weapon-preview-grid" id="heroWeaponGrid"></div>
+    <button class="btn-start" onclick="startQuiz()">开始测试</button>
+  </section>
+
+  <!-- ===== QUIZ ===== -->
+  <section id="quiz">
+    <div class="quiz-header">
+      <div class="progress-bar-outer">
+        <div class="progress-bar-inner" id="progressBar"></div>
+      </div>
+      <div class="progress-text" id="progressText">1 / 40</div>
+    </div>
+    <div class="question-card" id="questionCard"></div>
+    <div class="quiz-nav">
+      <button class="btn-back" id="btnBack" onclick="prevQuestion()">← 上一题</button>
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()">下一题 →</button>
+    </div>
+  </section>
+
+  <!-- ===== RESULT ===== -->
+  <section id="result"></section>
+
+</div>
+
+<script>
+// ==================== DATA ====================
+
+// MBTI questions: 10 per dimension
+const questions = [
+  // === E/I (0-9): 同意=E倾向 ===
+  { dim: 'ei', text: '参加完一场热闹的聚会后，你会感到精力充沛而不是疲惫。' },
+  { dim: 'ei', text: '在团队中讨论想法比独自思考更能激发你的灵感。' },
+  { dim: 'ei', text: '周末你更倾向于约朋友出去玩，而不是一个人在家待着。' },
+  { dim: 'ei', text: '在人多的地方你会感到兴奋，而不是想要逃离。' },
+  { dim: 'ei', text: '遇到烦恼时，你更愿意找朋友倾诉而不是自己消化。' },
+  { dim: 'ei', text: '你更喜欢认识新朋友，而不是只和老朋友深交。' },
+  { dim: 'ei', text: '在会议或讨论中你通常较早发言，而不是先听别人说完。' },
+  { dim: 'ei', text: '在聚会中你更像是活跃气氛的人，而不是安静观察的人。' },
+  { dim: 'ei', text: '打电话比发文字消息更让你觉得自在。' },
+  { dim: 'ei', text: '如果可以选择，你更愿意在开放式办公室工作而不是独立的私人空间。' },
+
+  // === S/N (10-19): 同意=N倾向 ===
+  { dim: 'sn', text: '你更关注事物背后的可能性和整体模式，而非眼前的具体事实和细节。' },
+  { dim: 'sn', text: '学习新事物时，你喜欢先了解大框架再深入细节，而不是按部就班地学习。' },
+  { dim: 'sn', text: '你更相信自己的直觉和预感，而不是只依赖亲身经验和数据。' },
+  { dim: 'sn', text: '描述事物时，你更喜欢用比喻和意象，而不是具体准确的描述。' },
+  { dim: 'sn', text: '你对探索抽象概念和理论的兴趣大于处理实际的具体问题。' },
+  { dim: 'sn', text: '旅行时你喜欢随意探索和偶遇惊喜，而不是严格按攻略和地图行动。' },
+  { dim: 'sn', text: '面对新信息时，你首先想到的是"这可能意味着什么"而不是"它具体是什么"。' },
+  { dim: 'sn', text: '你更擅长记住整体印象和感觉，而不是精确的事实和数据。' },
+  { dim: 'sn', text: '解决问题时你喜欢尝试创新的方法，而不是使用经过验证的成熟方案。' },
+  { dim: 'sn', text: '读小说时，充满想象力的世界观设定比写实细腻的描写更吸引你。' },
+
+  // === T/F (20-29): 同意=F倾向 ===
+  { dim: 'tf', text: '做重要决定时，你更依赖内心的感受和价值观，而不是纯逻辑分析。' },
+  { dim: 'tf', text: '当需要指出别人的错误时，你会选择委婉温和的方式而不是直言不讳。' },
+  { dim: 'tf', text: '你认为在大多数情况下，人际关系的和谐比坚持原则公平更重要。' },
+  { dim: 'tf', text: '看到别人哭泣或难过时，你会很自然地感同身受，而不是感到尴尬或不自在。' },
+  { dim: 'tf', text: '在团队中，你更关注成员之间的相处是否愉快，而不是任务是否高效完成。' },
+  { dim: 'tf', text: '当规则和人情发生冲突时，你更倾向于照顾人情而不是严格遵守规则。' },
+  { dim: 'tf', text: '一个好的决策应该综合考虑每个人的感受，而不仅仅是客观的数据分析。' },
+  { dim: 'tf', text: '一个有温度的故事比一个严密的逻辑论证更能说服你。' },
+  { dim: 'tf', text: '在团队合作中，你会优先关注每个成员的感受和状态，而非任务的进度。' },
+  { dim: 'tf', text: '看感人的电影或故事时，你会自然地流露情感，而不是刻意克制。' },
+
+  // === J/P (30-39): 同意=P倾向 ===
+  { dim: 'jp', text: '你更喜欢随机应变、灵活处理，而不是提前制定详细的计划。' },
+  { dim: 'jp', text: '你的工作或生活空间偏向随性自在，而不是整洁有序、井井有条。' },
+  { dim: 'jp', text: '截止日期给你带来的更多是压迫感，而不是安心和方向感。' },
+  { dim: 'jp', text: '旅行时你倾向于走到哪算哪，而不是提前把每天的行程都安排好。' },
+  { dim: 'jp', text: '你更喜欢想到什么就做什么，而不是按清单逐项完成任务。' },
+  { dim: 'jp', text: '做了决定之后，你经常根据情况变化调整，而不是很少改变主意。' },
+  { dim: 'jp', text: '比起固定的日常安排，你更喜欢每天都有新鲜和变化。' },
+  { dim: 'jp', text: '开始一项任务前，你倾向于直接动手试试，而不是花大量时间充分准备。' },
+  { dim: 'jp', text: '你喜欢把工作和休息灵活穿插，而不是将两者明确分开。' },
+  { dim: 'jp', text: '你倾向于任务做到最后关头再冲刺完成，而不是早早提前搞定。' },
+];
+
+// 14 weapon definitions
+const weapons = [
+  {
+    id: 'greatsword', name: '大剑', nameEn: 'Great Sword',
+    emoji: '🗡️',
+    vector: [-4, -2, -5, -5],  // I-leaning, mildly S, strongly T, strongly J
+    reason: '你是一个沉稳而果断的猎人。大剑需要耐心等待最佳时机，一击入魂，没有花哨的连段，只有纯粹的伤害数字。蓄力三段的节奏感和"在正确的时间做正确的事"的哲学，完美契合你冷静理性的内心世界。你不是追着怪物跑的人——你站在怪物会经过的地方，一刀解决问题。',
+    meme: '真·男人从不看伤害数字，因为数字太大根本数不过来。蓄力→松开→再看一眼已经断尾了。队友还在连招的时候你已经收刀等下一轮了——效率，永不过时。',
+    tags: ['一击入魂','蓄力真男人','伤害天花板','简单粗暴']
+  },
+  {
+    id: 'longsword', name: '太刀', nameEn: 'Long Sword',
+    emoji: '⚔️',
+    vector: [4, 1, 0, 3],  // E-leaning, mild N, balanced TF, P (精准反击 > 感性)
+    reason: '你是全场最靓的猎人，自带主角光环。太刀的核心机制"见切"需要你在怪物攻击的瞬间做出完美反应——高风险高回报，正如你在社交场合中的游刃有余。登龙剑的华丽演出效果就是为你准备的：帅气、自信、全队目光的焦点。',
+    meme: '太刀侠之呼吸·壹之型·队友膝盖收割！见切如风，登龙如虹，猫车如归。你以为你在打输出，其实你在拍动作电影。队友: "求你换个武器吧。" 你: "不，太刀是一种信仰。"',
+    tags: ['主角光环','见切如风','登龙剑','全队焦点']
+  },
+  {
+    id: 'swordshield', name: '片手剑', nameEn: 'Sword & Shield',
+    emoji: '🛡️',
+    vector: [0, -2, 4, 4],  // balanced EI, mildly S, F, P
+    reason: '你是团队中默默付出的大管家。片手剑是全游戏最被低估的武器：可以不收刀喝药、可以骑乘、可以打晕、可以断尾——什么都能做，什么都不张扬。你的实用主义精神和对队友的默默守护，正是片手剑的灵魂所在。',
+    meme: '新手教程让你用片手剑，于是你以为它是"新手武器"。直到你看到一个片手剑大佬骑了三次怪、奶了全队八口、补了两个陷阱，顺便还断了尾——你沉默了。片手剑不是弱，是低调。',
+    tags: ['万能辅助','不收刀喝药','被低估的王者','低调全能']
+  },
+  {
+    id: 'dualblades', name: '双刀', nameEn: 'Dual Blades',
+    emoji: '🔪',
+    vector: [7, -1, 0, 7],  // strongly E, mild S, balanced TF, strongly P
+    reason: '你是肾上腺素驱动型的猎人，贴脸猛攻就是你的舒适区。双刀鬼人化之后化身人形陀螺，疯狂输出不讲道理。你享受那种高速战斗的快感，不喜欢等待，不喜欢防御——最好的防御就是进攻，进攻，再进攻。',
+    meme: '鬼人化之后我就是全场最快的崽！转！转！转！队友: "你在哪？" 你: "在怪物的脚底下旋转跳跃。" 耐力条？那是用来烧的。看到怪物倒地了吗？那是你的双刀陀螺打桩机时间。',
+    tags: ['鬼人陀螺','极速输出','贴脸猛男','不防就是防']
+  },
+  {
+    id: 'hammer', name: '大锤', nameEn: 'Hammer',
+    emoji: '🔨',
+    vector: [3, -4, -1, 1],  // mild E, S, mild T, balanced JP
+    reason: '你是一个朴实无华但效果拔群的行动派。大锤的哲学很简单：看到头就敲。不需要复杂的能量管理，不需要属性克制表——你只需要把锤子举起来，然后砸下去。每次怪物被KO倒地的瞬间，全队都知道是谁的功劳。',
+    meme: 'BONK! 去horny jail! 只有大锤玩家才懂的真理：看到头就走不动路。怪物头在哪你在哪，队友在输出身体——你在跟头死磕。KO的瞬间全队都在心里给你鼓掌。简单、粗暴、有效。',
+    tags: ['KO之王','BONK','简单粗暴','看到头就敲']
+  },
+  {
+    id: 'huntinghorn', name: '狩猎笛', nameEn: 'Hunting Horn',
+    emoji: '🎵',
+    vector: [-1, 1, 8, -4],  // mild I, balanced SN, strongly F, J (曲谱执行 > 抽象创造)
+    reason: '你是用音乐治愈世界的温柔猎人。狩猎笛不仅是一把武器，更是一件乐器——你在输出的同时给全队上buff：攻击up、防御up、体力up、耐力不减……队友可能不知道你做了什么，但每个人都能感受到有你真好。这是属于理想主义者和利他主义者的终极武器。',
+    meme: '别人打怪我演奏，队友输出我伴奏。doot doot——你以为我在划水？没有我的旋律buff你们早猫车了！狩猎笛玩家是猎人界的隐藏菩萨：行善积德，不求回报（主要是伤害榜上回报不了）。',
+    tags: ['团队Buff机','音乐猎人','隐藏菩萨','doot doot']
+  },
+  {
+    id: 'lance', name: '长枪', nameEn: 'Lance',
+    emoji: '🛡️',
+    vector: [-7, -5, -3, -6],  // strongly I, S, mild T, J
+    reason: '全游戏最稳的男人/女人就是你。长枪的盾牌能挡住几乎一切攻击——你不需要翻滚，不需要走位，你就站在怪物面前，一步不退。精准的戳击节奏如同你的行事风格：稳定、可靠、持久。天崩地裂你自岿然不动。',
+    meme: '你打任你打，我挡任我挡。怪物喷火？挡。怪物龙车？挡。怪物大招？挡。队友全在翻滚逃命，而你站在原地戳戳戳。你不是怂，你只是觉得没必要躲——能挡住的东西为什么要躲？',
+    tags: ['绝对防御','一步不退','最稳的男人','戳戳戳']
+  },
+  {
+    id: 'gunlance', name: '铳枪', nameEn: 'Gunlance',
+    emoji: '💣',
+    vector: [-4, 4, -1, -2],  // I, N, balanced TF, mild J
+    reason: '长枪已经够稳了？那在长枪上加一门炮呢？铳枪就是为你这种独特灵魂准备的武器。你有自己的一套逻辑体系，不喜欢随大流。全弹发射无视肉质、无视部位、无视一切花里胡哨——爆炸面前众生平等。这是属于"不走寻常路"的猎人的武器。',
+    meme: '全弹发射！！！——然后进入长达三秒的冷却动画，你站在原地动弹不得，怪物的尾巴正朝你飞来。但你不在乎，因为 EXPLOSION!!! 铳枪玩家的字典里没有"效率"两个字，只有"够不够炸"。',
+    tags: ['全弹发射','EXPLOSION','无视肉质','不走寻常路']
+  },
+  {
+    id: 'switchaxe', name: '斩击斧', nameEn: 'Switch Axe',
+    emoji: '🪓',
+    vector: [2, 2, -2, -1],  // mild E, mild N, mild T, balanced JP
+    reason: '你喜欢"变形"这个概念——在不同的状态之间切换，灵活地适应局面。斩击斧正是如此：斧模式灵活走位充能，剑模式爆发输出，零距离属性解放把整个武器插在怪物身上引爆。机械感和暴力美学的完美结合。',
+    meme: '零距离属性解放——不是输出，是信仰。你整个人挂在怪物脸上，把斩击斧插进去然后引爆。队友: "你不怕被打吗？" 你: "怕什么，帅就完了。" 变形！斩击斧人！',
+    tags: ['变形金刚','零属解','机械美学','帅就完了']
+  },
+  {
+    id: 'chargeblade', name: '盾斧', nameEn: 'Charge Blade',
+    emoji: '⚡',
+    vector: [-2, 7, -3, -5],  // mild I, strongly N, mild T, J
+    reason: '盾斧是全游戏最复杂的武器——你需要管理瓶能量、盾强化、剑强化、斧形态的超解时机……入门门槛极高，但精通之后毁天灭地。这正符合你深邃而追求完美的性格：你不是学不会，你只是想找到最完美的解法。只有真正的智者和真正的战士才会选择盾斧。',
+    meme: '超——解——！！！……打空了。没事，冷却时间不长（才怪）。盾斧玩家有两种状态：1. 在蓄瓶 2. 在超解的路上。超解命中了就是全场最靓的仔，超解打空了……就当放了个烟花。GP（Guard Point）成功的那一刻，你就是神。',
+    tags: ['超解毁天灭地','最复杂武器','GP大神','高智商之选']
+  },
+  {
+    id: 'insectglaive', name: '操虫棍', nameEn: 'Insect Glaive',
+    emoji: '🦋',
+    vector: [1, 4, -1, 7],  // balanced EI, N, mild T (萃取管理>感性), strongly P
+    reason: '你在天上飞，怪物在地上追——操虫棍是最具自由精神的武器。猎虫是你的伙伴（就像艾露猫一样），萃取精华强化自身，然后飞天乱舞。你追求自由和独特的战斗方式，不喜欢被束缚在地面上。精准萃取 + 灵活空战 = 你的完美狩猎节奏。',
+    meme: 'Je suis monté! 法国猎人精神永存。你从空中俯冲下来的样子像一只优雅的蝴蝶——然后被怪物一巴掌拍飞。但这不重要，因为帅就是真理。猎虫：你的第二只艾露猫，比艾露猫还听话。',
+    tags: ['飞天猎人','Je suis monté','猎虫伙伴','拒绝地面']
+  },
+  {
+    id: 'lightbowgun', name: '轻弩炮', nameEn: 'Light Bowgun',
+    emoji: '🎯',
+    vector: [2, 2, -2, 6],  // mild E, mild N, mild T (战术控场), P
+    reason: '你是战术大师，喜欢用各种异常状态和属性弹药玩弄怪物于股掌之间。麻痹→睡眠→毒→减气，你有一百种方法让怪物活不下去。轻弩的高机动性让你在战场中游走自如，永远在怪物打不到的地方输出——聪明人从不正面硬刚。',
+    meme: '异常状态的king，队友的控场王。麻痹弹命中→全队集火→怪物刚站起来又被你睡了→爆桶伺候。怪物全程不知道发生了什么，只知道一直在瘫痪。你: "一切尽在掌握。"',
+    tags: ['控场大师','异常状态King','高机动','战术碾压']
+  },
+  {
+    id: 'heavybowgun', name: '重弩炮', nameEn: 'Heavy Bowgun',
+    emoji: '💥',
+    vector: [-3, 0, -4, -5],  // mild I, balanced SN, T, J
+    reason: '移动炮台，散弹洗脸。你不需要花哨——你只需要最猛的火力。重弩炮的输出是教科书式的"站桩毁灭"：选好位置，架起盾牌，然后扣下扳机直到世界末日。你是那种追求极致效率和决定性力量的人，不喜欢拖泥带水。',
+    meme: '盾牌重弩 = 我既是长枪又是远程，既有防御又有输出——你以为你在玩怪物猎人，其实你在玩塔防游戏。散弹糊脸的那一刻，怪物开始怀疑到底谁才是Boss。机关龙弹扫射的时候，你甚至有空喝口茶。',
+    tags: ['移动炮台','散弹洗脸','火力压制','站桩毁灭']
+  },
+  {
+    id: 'bow', name: '弓', nameEn: 'Bow',
+    emoji: '🏹',
+    vector: [1, 1, -2, 5],  // mild E, balanced SN, mild T (精准节奏), P
+    reason: '滑步弓的优雅永不过时。你是那种追求美感和效率平衡的猎人——弓不需要装填，不需要弹药管理，只需要对怪物行为的精准预判和流畅的滑步节奏。超高机动性 + 持续输出 = 一种行云流水的战斗快感。你享受的是"优雅地变强"的过程。',
+    meme: '龙之矢——蓄力——发射！！！……怪物已经换区了。弓玩家的日常：蓄好最大蓄力，瞄准弱点，松手——怪物一个龙车跑到了地图另一头。但你依然是最靓的仔，因为滑步弓的动作设计堪称艺术品。没打中是怪物的问题，不是你的问题。',
+    tags: ['滑步优雅','龙之矢','行云流水','移动炮台轻量版']
+  },
+];
+
+// SVG icon mapping: weapon id → file path
+const weaponSvg = {
+  greatsword: 'assets/great-sword.svg',
+  longsword: 'assets/long-sword.svg',
+  swordshield: 'assets/sword-and-shield.svg',
+  dualblades: 'assets/dual-blades.svg',
+  hammer: 'assets/hammer.svg',
+  huntinghorn: 'assets/hunting-horn.svg',
+  lance: 'assets/lance.svg',
+  gunlance: 'assets/gunlance.svg',
+  switchaxe: 'assets/switch-axe.svg',
+  chargeblade: 'assets/charge-blade.svg',
+  insectglaive: 'assets/insect-glaive.svg',
+  lightbowgun: 'assets/light-bowgun.svg',
+  heavybowgun: 'assets/heavy-bowgun.svg',
+  bow: 'assets/bow.svg',
+};
+
+// MBTI type descriptions
+const mbtiDescriptions = {
+  'ISTJ': '你是"物流师"——严谨、务实、可靠。你重视规则和秩序，做事一丝不苟，是团队中最靠谱的定海神针。你不喜欢意外，喜欢计划，并且能把计划执行到底。在怪物猎人的世界里，你就是那个永远不会猫车的人。',
+  'ISFJ': '你是"守卫者"——温暖、细心、默默奉献。你对身边的人充满保护欲，总是先考虑别人的需求再考虑自己。你低调但绝不弱小，在关键时刻总能站出来守护大家。你就像一个行走的安全区。',
+  'INFJ': '你是"提倡者"——深邃、理想主义、充满洞察力。你有着丰富的内心世界和对完美的执着追求。你不满足于表面，总想看到更深层的真相。你的直觉敏锐到能预测怪物的下一个动作。',
+  'INTJ': '你是"建筑师"——战略家、规划者、独立思考者。你讨厌低效和混乱，总是在脑海中构建最优解。你不需要别人的认可，因为你已经计算好了结果。在狩猎中，你永远知道怪物下一步会做什么。',
+  'ISTP': '你是"鉴赏家"——冷静、务实、动手能力强。你擅长观察和分析机械系统的工作原理。你不喜欢空谈理论，更喜欢直接上手实践。给你一把武器，你就能拆解出最优的输出循环。',
+  'ISFP': '你是"探险家"——艺术感、灵活、活在当下。你有一颗敏感而自由的灵魂，追求美的体验和独特的表达。你不随大流，有自己的审美和节奏。你的狩猎风格就像一场即兴的舞蹈。',
+  'INFP': '你是"调停者"——理想主义、温柔、富有创造力。你内心有一个丰富的幻想世界，对美好事物充满向往。你忠于自己的价值观，用自己独特的方式与这个世界相处。你的狩猎方式温柔但绝不妥协。',
+  'INTP': '你是"逻辑学家"——好奇、爱钻研、热爱理论。你对复杂系统的运作机制充满热情，喜欢拆解一切直到理解它的本质。你在意"为什么"，而不只是"是什么"。怪物猎人的伤害计算公式？你已经自己推导了一遍。',
+  'ESTP': '你是"企业家"——大胆、直接、享受刺激。你是天生的行动派，不纠结、不犹豫、干就完了。你享受风险和肾上腺素飙升的感觉。贴脸输出对你来说不是压力，是享受。',
+  'ESFP': '你是"表演者"——热情、感染力强、热爱聚光灯。你是天生的气氛组，走到哪里都是焦点。你享受被人注视的感觉，也享受把快乐带给别人。你的狩猎就是一场精彩的演出。',
+  'ENFP': '你是"竞选者"——热情、自由、充满可能性。你对世界充满好奇心，总是在探索新的事物和想法。你讨厌被框住，喜欢保留所有的选项。你的狩猎风格灵活多变，永远不按套路出牌。',
+  'ENTP': '你是"辩论家"——机智、善辩、热爱智力挑战。你天生反骨，喜欢质疑一切"理所当然"的事情。你的大脑永远在高速运转，总能想到别人想不到的点子。你用各种奇怪但有效的配装让队友目瞪口呆。',
+  'ESTJ': '你是"总经理"——高效、果断、执行力超强。你是天生领导者，能把混乱的局面迅速整理出秩序。你喜欢明确的目标和清晰的路径。在你的带领下，全队狩猎效率至少提升30%。',
+  'ESFJ': '你是"执政官"——热情、善解人意、天生的照顾者。你是团队中的粘合剂，让每个人都感到被关心和被重视。你喜欢看到大家开心，并且愿意为此付出努力。有你在的狩猎队伍，猫车率下降50%。',
+  'ENFJ': '你是"主人公"——魅力四射、富有感染力、天生的领袖。你有一种让人愿意跟随的能力，能用你的热情点燃整个团队。你看重每个人的潜力，并帮助他们成为更好的自己——更好的猎人。',
+  'ENTJ': '你是"指挥官"——雄心勃勃、果断坚决、天生的统治者。你有远见卓识和强大的执行力，能带领团队走向胜利。你追求效率和成果，不喜欢借口和拖延。猎场就是你的指挥所。',
+};
+
+// ==================== STATE ====================
+const TOTAL = questions.length;
+let currentQuestion = 0;
+let answers = new Array(TOTAL).fill(null); // null or -3..+3
+
+// ==================== HELPERS ====================
+function getMbtiType(dimScores) {
+  // 0分视为均衡，标记为X（UI上显示为斜杠或说明）
+  let type = '';
+  type += dimScores.ei < 0 ? 'I' : dimScores.ei > 0 ? 'E' : 'X';
+  type += dimScores.sn < 0 ? 'S' : dimScores.sn > 0 ? 'N' : 'X';
+  type += dimScores.tf < 0 ? 'T' : dimScores.tf > 0 ? 'F' : 'X';
+  type += dimScores.jp < 0 ? 'J' : dimScores.jp > 0 ? 'P' : 'X';
+  return type;
+}
+
+function calcDimScores() {
+  const scores = { ei: 0, sn: 0, tf: 0, jp: 0 };
+  answers.forEach((ans, i) => {
+    if (ans === null) return;
+    const dim = questions[i].dim;
+    scores[dim] += ans;
+  });
+  return scores;
+}
+
+function cosineSimilarity(a, b) {
+  let dot = 0, magA = 0, magB = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    magA += a[i] * a[i];
+    magB += b[i] * b[i];
+  }
+  if (magA === 0 || magB === 0) return 0;
+  return dot / (Math.sqrt(magA) * Math.sqrt(magB));
+}
+
+function findBestWeapon(dimScores) {
+  const userVec = [dimScores.ei, dimScores.sn, dimScores.tf, dimScores.jp];
+
+  // 全零向量时所有武器相似度相同，取第一把无意义
+  const allZero = userVec.every(v => v === 0);
+  if (allZero) return null;
+
+  let best = null, bestSim = -Infinity;
+  const allMatches = [];
+
+  weapons.forEach(w => {
+    const sim = cosineSimilarity(userVec, w.vector);
+    allMatches.push({ weapon: w, similarity: sim });
+    if (sim > bestSim) { bestSim = sim; best = w; }
+  });
+
+  allMatches.sort((a, b) => b.similarity - a.similarity);
+
+  // 余弦相似度范围-1..1，映射到50%..100%（加clamp保险）
+  const simToPercent = (sim) => Math.max(0, Math.min(100, Math.round(50 + sim * 50)));
+
+  return {
+    primary: best,
+    primaryPct: simToPercent(bestSim),
+    alts: allMatches.slice(1, 3).map(m => ({
+      weapon: m.weapon,
+      pct: simToPercent(m.similarity),
+    })),
+  };
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 1800);
+}
+
+// ==================== RENDER ====================
+function renderHero() {
+  document.getElementById('hero').style.display = 'flex';
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('result').style.display = 'none';
+}
+
+function renderQuiz() {
+  document.getElementById('hero').style.display = 'none';
+  document.getElementById('quiz').style.display = 'flex';
+  document.getElementById('result').style.display = 'none';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const answered = answers[currentQuestion];
+  const card = document.getElementById('questionCard');
+  const btnBack = document.getElementById('btnBack');
+  const btnNext = document.getElementById('btnNext');
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+
+  progressBar.style.width = ((currentQuestion + 1) / TOTAL * 100) + '%';
+  progressText.textContent = (currentQuestion + 1) + ' / ' + TOTAL;
+
+  btnBack.style.visibility = currentQuestion === 0 ? 'hidden' : 'visible';
+  btnNext.disabled = answered === null;
+  btnNext.textContent = currentQuestion === TOTAL - 1 ? '查看结果 ✨' : '下一题 →';
+
+  const labels = ['非常不同意', '不同意', '有点不同意', '中立', '有点同意', '同意', '非常同意'];
+
+  card.innerHTML = `
+    <div class="q-number">第 ${currentQuestion + 1} 题</div>
+    <div class="q-text">${q.text}</div>
+    <div class="options">
+      ${labels.map((label, i) => {
+        const value = i - 3; // -3 to +3
+        const sel = answered === value ? ' selected' : '';
+        return `<div class="opt-btn${sel}" data-value="${value}">
+          <span>${label}</span>
+          <div class="opt-dot"></div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+
+  // Bind option clicks — auto-advance to next question
+  card.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = parseInt(btn.dataset.value);
+      answers[currentQuestion] = val;
+      setTimeout(() => nextQuestion(), 180); // 短暂延迟让用户看到选中效果再跳转
+    });
+  });
+}
+
+function renderResult() {
+  document.getElementById('hero').style.display = 'none';
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('result').style.display = 'flex';
+
+  const dimScores = calcDimScores();
+  const mbtiType = getMbtiType(dimScores);
+  // 若有X维度，用不含X的最近类型匹配描述；找不到则用通用描述
+  const cleanType = mbtiType.replace(/X/g, '');
+  const desc = mbtiDescriptions[mbtiType] || mbtiDescriptions[cleanType] ||
+    '你是一个独特且平衡的猎人。在某些维度上你展现出了均衡的特质，这让你在狩猎中能够灵活适应不同的局面。';
+  const hasX = mbtiType.includes('X');
+  const match = findBestWeapon(dimScores);
+
+  const dimMax = 30;
+  function dimBar(leftLabel, rightLabel, score, cls) {
+    const pct = Math.round((score + dimMax) / (2 * dimMax) * 100);
+    const isCenter = score === 0;
+    return `
+      <div class="dim-row">
+        <span class="dim-label-left">${leftLabel}</span>
+        <div class="dim-bar-track">
+          <div class="dim-bar-fill ${cls}" style="width:${pct}%"></div>
+        </div>
+        <span class="dim-label-right">${rightLabel}</span>
+        <span class="dim-percent">${score > 0 ? '+' + score : score}${isCenter ? ' 均衡' : ''}</span>
+      </div>
+    `;
+  }
+
+  // 武器推荐部分
+  let weaponHTML = '';
+  if (!match) {
+    weaponHTML = `
+      <div class="section-divider">🐱 艾露猫摇摇头</div>
+      <div class="weapon-card">
+        <p style="color:var(--text-dim);padding:20px;">
+          你的维度分数完全中立，艾露猫无法确定你的专属武器……<br>
+          或许你是个什么都想试试的自由猎人！<br>
+          🐱："喵？你到底是哪种猎人啊？再测一次吧！"
+        </p>
+        <div class="btn-row" style="margin-top:12px;">
+          <button class="btn-retry" onclick="retryQuiz()">🔄 重新测试</button>
+        </div>
+      </div>`;
+  } else {
+    const w = match.primary;
+    weaponHTML = `
+      <div class="section-divider">🐱 艾露猫的武器推荐</div>
+      <div class="weapon-card">
+        <div class="match-badge">⚔️ 匹配度 ${match.primaryPct}%</div>
+        <div class="weapon-icon-wrap"><img src="${weaponSvg[w.id]}" alt="${w.name}" width="96" height="96"></div>
+        <div class="weapon-name">${w.name}</div>
+        <div class="weapon-name-en">${w.nameEn}</div>
+        <div class="weapon-reason"><strong>🔍 为什么这把武器适合你</strong><br><br>${w.reason}</div>
+        <div class="weapon-meme"><strong>😂 猎人锐评（热梗时间）</strong><br><br>${w.meme}</div>
+        <div class="weapon-tags">${w.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+      <div class="alt-weapons">
+        备选武器：<span>${match.alts[0].weapon.name} (${match.alts[0].pct}%)</span> · <span>${match.alts[1].weapon.name} (${match.alts[1].pct}%)</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn-retry" onclick="retryQuiz()">🔄 重新测试</button>
+        <button class="btn-share" onclick="shareResult('${mbtiType}', '${w.name}')">📋 分享结果</button>
+      </div>`;
+  }
+
+  document.getElementById('result').innerHTML = `
+    <div class="result-header">
+      <div class="mbti-type-badge">${mbtiType}</div>
+      <div class="mbti-name">${mbtiDescriptions[mbtiType] ? mbtiDescriptions[mbtiType].split('——')[0].replace('你是"','').replace('"','') : (cleanType ? mbtiDescriptions[cleanType].split('——')[0].replace('你是"','').replace('"','') : '自由猎人')}</div>
+      ${hasX ? '<div style="font-size:12px;color:var(--gold-dim);margin-top:4px;">⚠️ 标X维度倾向不显著，结果仅供参考</div>' : ''}
+    </div>
+
+    <div class="dim-bars">
+      ${dimBar('I', 'E', dimScores.ei, 'ei')}
+      ${dimBar('S', 'N', dimScores.sn, 'sn')}
+      ${dimBar('T', 'F', dimScores.tf, 'tf')}
+      ${dimBar('J', 'P', dimScores.jp, 'jp')}
+    </div>
+
+    <div class="mbti-desc">${desc}</div>
+
+    ${weaponHTML}
+
+    <div class="footer">
+      此测试仅供娱乐 · 武器无高下之分 · 艾露猫爱你<br>
+      Monster Hunter Wilds &copy; CAPCOM
+    </div>
+  `;
+}
+
+// ==================== ACTIONS ====================
+function startQuiz() {
+  currentQuestion = 0;
+  answers = new Array(TOTAL).fill(null);
+  renderQuiz();
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    renderQuestion();
+  }
+}
+
+function nextQuestion() {
+  if (answers[currentQuestion] === null) {
+    showToast('请先选择一个选项哦~');
+    return;
+  }
+  if (currentQuestion < TOTAL - 1) {
+    currentQuestion++;
+    renderQuestion();
+  } else {
+    // Finished — check all answered
+    const unanswered = answers.filter(a => a === null).length;
+    if (unanswered > 0) {
+      showToast('还有 ' + unanswered + ' 题未回答，请完成所有题目~');
+      for (let i = 0; i < TOTAL; i++) {
+        if (answers[i] === null) { currentQuestion = i; renderQuestion(); return; }
+      }
+    }
+    renderResult();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function retryQuiz() {
+  startQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function shareResult(type, weapon) {
+  const text = `🛡️ 我的狩魂性格是 ${type}！\n🐱 艾露猫推荐我的《怪物猎人：荒野》专属武器：${weapon}！\n👇 来测测你的：`;
+  if (navigator.share) {
+    navigator.share({ title: '狩魂性格检定', text: text, url: location.href })
+      .catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text + ' ' + location.href).then(() => {
+      showToast('已复制分享内容！');
+    });
+  }
+}
+
+// ==================== INIT ====================
+function initHeroWeaponGrid() {
+  const grid = document.getElementById('heroWeaponGrid');
+  if (!grid) return;
+
+  // Reference layout: 4-col grid with MHW logo in row 2 center
+  const order = [
+    'gunlance', 'longsword', 'dualblades', 'huntinghorn',
+    'swordshield', null, 'bow',           // null = logo (spans 2)
+    'insectglaive', 'chargeblade', 'switchaxe', 'lance',
+    'greatsword', 'heavybowgun', 'hammer', 'lightbowgun',
+  ];
+
+  grid.innerHTML = order.map(id => {
+    if (id === null) {
+      return '<div class="wp-logo-tile"><span class="mhw-logo-text">MONSTER HUNTER WILDS</span></div>';
+    }
+    const w = weapons.find(x => x.id === id);
+    const svg = weaponSvg[id];
+    return `<div class="wp-tile">
+      <img src="${svg}" alt="${w ? w.name : id}" loading="lazy">
+      <span class="wp-name">${w ? w.name : id}</span>
+    </div>`;
+  }).join('');
+}
+initHeroWeaponGrid();
+renderHero();
+</script>
+
+</body>
+</html>

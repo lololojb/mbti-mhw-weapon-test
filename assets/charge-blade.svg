@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Charge Blade icon</title>
+  <defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".35"/></filter></defs>
+  <g filter="url(#shadow)" stroke="#292929" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#f3f2ee" d="M42 217L159 100l-23-23 42-51 19 19-51 42 23 23L52 227z"/>
+    <path fill="#f3f2ee" d="M78 74c34 4 61 19 80 46-8 48-35 81-80 98-45-17-72-50-80-98 19-27 46-42 80-46z" transform="translate(61 13) scale(.72)"/>
+    <circle cx="125" cy="123" r="10" fill="#f3f2ee"/>
+    <circle cx="151" cy="148" r="10" fill="#f3f2ee"/>
+    <circle cx="128" cy="172" r="10" fill="#f3f2ee"/>
+  </g>
+</svg>

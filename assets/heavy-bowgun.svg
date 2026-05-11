@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Heavy Bowgun icon</title>
+  <defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".35"/></filter></defs>
+  <g filter="url(#shadow)" stroke="#292929" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#f3f2ee" d="M25 146l91-53h72l45 28-39 25h-75l-54 58z"/>
+    <path fill="#f3f2ee" d="M178 99l39-30 23 17-34 34z"/>
+    <path fill="#f3f2ee" d="M91 157l42 20-20 53-42-17z"/>
+    <path fill="#f3f2ee" d="M35 126l-21 5v25l28-6z"/>
+    <path fill="none" d="M113 94l24 54M147 92l26 55"/>
+    <circle cx="170" cy="122" r="13" fill="#f3f2ee"/>
+  </g>
+</svg>

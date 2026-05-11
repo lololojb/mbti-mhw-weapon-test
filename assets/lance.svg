@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Lance icon</title>
+  <defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".35"/></filter></defs>
+  <g filter="url(#shadow)" stroke="#292929" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#f3f2ee" d="M38 219L179 78l-20-20 58-30-30 58-20-20L26 207z"/>
+    <path fill="#f3f2ee" d="M66 94c31 4 56 18 74 42-7 41-31 70-74 87-43-17-67-46-74-87 18-24 43-38 74-42z" transform="translate(37 1) scale(.78)"/>
+    <path fill="none" d="M92 109c19 8 34 22 44 41-9 20-23 36-44 48"/>
+  </g>
+</svg>

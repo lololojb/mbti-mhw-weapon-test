@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Dopey Palico-style mascot</title>
+  <desc id="desc">Original flat mascot inspired by a silly cat companion expression.</desc>
+  <defs>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 .55 0 0 0 0 .65 0 0 0 0 1 0 0 0 .65 0"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#glow)" stroke="#4a3f4f" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#352d55" stroke-width="8" d="M63 98L47 35c25 2 45 17 60 43 17-29 39-44 66-43l-16 64c18 16 29 39 29 65 0 48-35 81-79 81s-79-33-79-81c0-26 11-50 35-66z"/>
+    <circle cx="107" cy="139" r="60" fill="#fff4ca" stroke-width="8"/>
+    <path fill="#fff7db" stroke-width="6" d="M64 174c18-19 45-21 63-3-18 18-43 21-63 3z"/>
+    <path fill="#fff7db" stroke-width="6" d="M129 171c19-18 46-16 63 3-20 18-45 15-63-3z"/>
+    <circle cx="84" cy="125" r="14" fill="none" stroke-width="8"/>
+    <circle cx="132" cy="125" r="14" fill="none" stroke-width="8"/>
+    <path fill="none" stroke-width="7" d="M104 143c0 8-8 10-13 5M110 143c0 8 8 10 13 5"/>
+    <path fill="none" stroke-width="7" d="M107 138v9"/>
+    <path fill="#b88748" stroke-width="7" d="M75 222c9 13 24 18 38 8l-10-25z"/>
+    <path fill="#b88748" stroke-width="7" d="M141 205l-10 25c14 10 29 5 38-8z"/>
+  </g>
+</svg>

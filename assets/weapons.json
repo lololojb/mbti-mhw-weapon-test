@@ -1,0 +1,16 @@
+[
+  { "id": "great-sword", "zh": "\u5927\u5251", "en": "Great Sword", "icon": "icons/great-sword.svg" },
+  { "id": "long-sword", "zh": "\u592a\u5200", "en": "Long Sword", "icon": "icons/long-sword.svg" },
+  { "id": "sword-and-shield", "zh": "\u7247\u624b\u5251", "en": "Sword and Shield", "icon": "icons/sword-and-shield.svg" },
+  { "id": "dual-blades", "zh": "\u53cc\u5251", "en": "Dual Blades", "icon": "icons/dual-blades.svg" },
+  { "id": "hammer", "zh": "\u5927\u9524", "en": "Hammer", "icon": "icons/hammer.svg" },
+  { "id": "hunting-horn", "zh": "\u72e9\u730e\u7b1b", "en": "Hunting Horn", "icon": "icons/hunting-horn.svg" },
+  { "id": "lance", "zh": "\u957f\u67aa", "en": "Lance", "icon": "icons/lance.svg" },
+  { "id": "gunlance", "zh": "\u94f3\u67aa", "en": "Gunlance", "icon": "icons/gunlance.svg" },
+  { "id": "switch-axe", "zh": "\u65a9\u51fb\u65a7", "en": "Switch Axe", "icon": "icons/switch-axe.svg" },
+  { "id": "charge-blade", "zh": "\u76fe\u65a7", "en": "Charge Blade", "icon": "icons/charge-blade.svg" },
+  { "id": "insect-glaive", "zh": "\u64cd\u866b\u68cd", "en": "Insect Glaive", "icon": "icons/insect-glaive.svg" },
+  { "id": "light-bowgun", "zh": "\u8f7b\u5f29\u70ae", "en": "Light Bowgun", "icon": "icons/light-bowgun.svg" },
+  { "id": "heavy-bowgun", "zh": "\u91cd\u5f29\u70ae", "en": "Heavy Bowgun", "icon": "icons/heavy-bowgun.svg" },
+  { "id": "bow", "zh": "\u5f13", "en": "Bow", "icon": "icons/bow.svg" }
+]

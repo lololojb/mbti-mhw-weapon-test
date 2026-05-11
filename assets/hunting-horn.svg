@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Hunting Horn icon</title>
+  <defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".35"/></filter></defs>
+  <g filter="url(#shadow)" stroke="#292929" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#f3f2ee" d="M44 177c22-12 37-30 47-55 10-26 26-47 48-62 24-16 49-21 75-16-9 30-27 57-54 82-27 25-47 53-60 84-23-6-42-17-56-33z"/>
+    <path fill="#f3f2ee" d="M112 212c-24 10-48 7-72-10 8-15 21-24 38-27 15 13 26 25 34 37z"/>
+    <circle cx="148" cy="105" r="18" fill="#f3f2ee"/>
+    <circle cx="190" cy="70" r="12" fill="#f3f2ee"/>
+    <path fill="none" d="M72 178c19-13 33-33 42-59M151 33v23M185 27l-8 21M217 42l-18 15"/>
+  </g>
+</svg>

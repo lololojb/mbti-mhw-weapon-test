@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Hammer icon</title>
+  <defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".35"/></filter></defs>
+  <g filter="url(#shadow)" stroke="#292929" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#f3f2ee" d="M60 63c24-25 65-30 99-13 21 10 35 26 43 47l-31 36c-20-5-42-17-63-35-22-18-38-30-48-35z"/>
+    <path fill="#f3f2ee" d="M112 111l35 29-70 84-35-29z"/>
+    <path fill="#f3f2ee" d="M35 195l42 35"/>
+    <path fill="none" d="M85 67c28 11 54 28 78 51"/>
+    <circle cx="182" cy="86" r="15" fill="#f3f2ee"/>
+  </g>
+</svg>

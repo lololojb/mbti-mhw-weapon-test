@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">Great Sword icon</title>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)" stroke="#292929" stroke-width="10" stroke-linejoin="round" stroke-linecap="round">
+    <path fill="#f3f2ee" d="M61 222V86c0-31 17-57 50-78l76 8c-34 26-54 57-59 93-3 25 2 49 16 72l-27 16-20-37v48z"/>
+    <path fill="none" d="M176 24c-29 23-46 48-51 76"/>
+    <circle cx="101" cy="119" r="14" fill="#f3f2ee"/>
+    <circle cx="101" cy="167" r="14" fill="#f3f2ee"/>
+    <path fill="#f3f2ee" d="M118 202l34 29 36-1 3-22-31-2-27-24z"/>
+    <path d="M145 204l-22 12M166 221l-14-19" fill="none"/>
+  </g>
+</svg>
